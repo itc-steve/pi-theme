@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">pi-theme</title>
+  <desc id="desc">A Pi terminal extension showing a blue boxed editor and fenceless, background-filled code.</desc>
+
+  <rect width="1200" height="400" rx="28" fill="#07111f"/>
+  <path d="M0 332H1200" stroke="#16304d"/>
+
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <text x="64" y="68" fill="#5fb9ff" font-size="18" font-weight="700" letter-spacing="3">PI TERMINAL EXTENSION</text>
+    <text x="60" y="158" fill="#f2f7fc" font-size="72" font-weight="750">pi-theme</text>
+    <text x="64" y="210" fill="#a9bbcc" font-size="26">Cleaner code blocks. A focused editor.</text>
+  </g>
+
+  <g transform="translate(64 264)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">
+    <path d="M16 0H12Q0 0 0 12V64Q0 76 12 76H458Q470 76 470 64V12Q470 0 458 0H90" fill="none" stroke="#26a7ff" stroke-width="3"/>
+    <text x="26" y="7" fill="#9ad5ff" font-size="17">gpt-5</text>
+    <rect x="18" y="18" width="434" height="40" rx="4" fill="#102c48"/>
+    <text x="32" y="45" fill="#d7e9f7">const focus = "code";</text>
+  </g>
+
+  <g transform="translate(620 50)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+    <rect width="516" height="262" rx="18" fill="#0c1928" stroke="#244561" stroke-width="2"/>
+    <circle cx="28" cy="27" r="5" fill="#26a7ff"/>
+    <circle cx="48" cy="27" r="5" fill="#244561"/>
+    <circle cx="68" cy="27" r="5" fill="#244561"/>
+    <text x="94" y="34" fill="#71889c" font-size="16">assistant.ts</text>
+
+    <rect x="24" y="62" width="468" height="174" rx="8" fill="#102c48"/>
+    <g font-size="20">
+      <text x="46" y="98" fill="#7ec8ff">export</text>
+      <text x="124" y="98" fill="#d7e9f7">function greet(name) {</text>
+      <text x="70" y="134" fill="#d7e9f7">return</text>
+      <text x="146" y="134" fill="#9fd6a8">`Hello ${name}`</text>
+      <text x="322" y="134" fill="#d7e9f7">;</text>
+      <text x="46" y="170" fill="#d7e9f7">}</text>
+      <text x="46" y="214" fill="#71889c" font-size="18">syntax stays · fences disappear</text>
+    </g>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="17" fill="#71889c">
+    <text x="620" y="356">PLAIN TEXT</text>
+    <text x="790" y="356">THEME-AWARE</text>
+    <text x="986" y="356">COPYABLE</text>
+  </g>
+</svg>

@@ -1,0 +1,56 @@
+{
+  "name": "@itc-steve/pi-theme",
+  "version": "0.1.0",
+  "description": "Personal Pi Theme",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "pi-coding-agent",
+    "theme",
+    "markdown"
+  ],
+  "author": {
+    "name": "itc-steve",
+    "url": "https://github.com/itc-steve"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itc-steve/pi-theme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itc-steve/pi-theme/issues"
+  },
+  "homepage": "https://github.com/itc-steve/pi-theme#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "files": [
+    "index.ts",
+    "src",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/*.test.ts"
+  },
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@earendil-works/pi-tui": {
+      "optional": true
+    }
+  }
+}
