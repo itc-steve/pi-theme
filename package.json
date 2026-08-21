@@ -1,6 +1,6 @@
 {
   "name": "@itc-steve/pi-theme",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Personal Pi Theme",
   "keywords": [
     "pi-package",
@@ -52,5 +52,9 @@
     "@earendil-works/pi-tui": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.84.2",
+    "@earendil-works/pi-tui": "^0.84.2"
   }
 }
