@@ -10,7 +10,7 @@ Personal Pi Theme — a small [Pi](https://pi.dev) extension that gives terminal
 
 ### Fenceless code blocks
 
-Fenced Markdown code renders without visible backtick fences. Syntax highlighting remains, and each line fills the available width with Pi's `toolPendingBg` theme color. Output stays plain terminal text, so selection and copy still work.
+Fenced Markdown code renders without visible backtick fences. Syntax highlighting remains, and each line fills the available width with Pi's `toolPendingBg` theme color. Blockquotes keep italic/quote color but drop the `│` gutter, so a line select copies the text instead of the chrome.
 
 ### Boxed editor
 

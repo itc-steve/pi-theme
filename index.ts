@@ -34,6 +34,39 @@ export function renderCodeBlockLines(
 
 const PATCHED = Symbol.for("pi-theme.markdown.codeblock");
 
+/** Drop TUI quote gutter (`│ `/`| `) so line-select copies the text only. */
+export function stripQuotePrefix(line: string): string {
+  return line.replace(/^((?:\x1b\[[0-9;]*m)*)[│|] ?/, "$1");
+}
+
+export function installPatches(getUi: () => { theme: Theme } | undefined = () => undefined) {
+  const proto = Markdown.prototype as unknown as Record<string | symbol, unknown> & {
+    renderToken(token: unknown, width: number, nextType?: string, styleContext?: unknown): string[];
+    theme: { highlightCode?: (code: string, lang?: string) => string[]; codeBlockIndent?: string };
+  };
+  if (proto[PATCHED]) return;
+  proto[PATCHED] = true;
+
+  const original = proto.renderToken;
+  proto.renderToken = function (token, width, nextType, styleContext) {
+    const t = token as CodeToken;
+    if (t?.type === "blockquote") {
+      return original.call(this, token, width, nextType, styleContext).map(stripQuotePrefix);
+    }
+    if (t?.type !== "code") return original.call(this, token, width, nextType, styleContext);
+
+    const ui = getUi();
+    const lines = renderCodeBlockLines(t.text, width, {
+      indent: this.theme.codeBlockIndent,
+      highlight: this.theme.highlightCode?.bind(this.theme),
+      lang: t.lang,
+      bg: ui ? (text: string) => ui.theme.bg("toolPendingBg", text) : undefined,
+    });
+    if (nextType && nextType !== "space") lines.push("");
+    return lines;
+  };
+}
+
 export default function (pi: ExtensionAPI) {
   // Read theme lazily so /theme switches take effect.
   let ui: { theme: Theme } | undefined;
@@ -73,25 +106,5 @@ export default function (pi: ExtensionAPI) {
   pi.on("agent_settled", async () => setWorking(false));
   pi.on("session_shutdown", async () => setWorking(false));
 
-  const proto = Markdown.prototype as unknown as Record<string | symbol, unknown> & {
-    renderToken(token: unknown, width: number, nextType?: string, styleContext?: unknown): string[];
-    theme: { highlightCode?: (code: string, lang?: string) => string[]; codeBlockIndent?: string };
-  };
-  if (proto[PATCHED]) return;
-  proto[PATCHED] = true;
-
-  const original = proto.renderToken;
-  proto.renderToken = function (token, width, nextType, styleContext) {
-    const t = token as CodeToken;
-    if (t?.type !== "code") return original.call(this, token, width, nextType, styleContext);
-
-    const lines = renderCodeBlockLines(t.text, width, {
-      indent: this.theme.codeBlockIndent,
-      highlight: this.theme.highlightCode?.bind(this.theme),
-      lang: t.lang,
-      bg: ui ? (text: string) => ui!.theme.bg("toolPendingBg", text) : undefined,
-    });
-    if (nextType && nextType !== "space") lines.push("");
-    return lines;
-  };
+  installPatches(() => ui);
 }
