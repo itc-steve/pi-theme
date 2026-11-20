@@ -1,9 +1,6 @@
 import type { ExtensionAPI, Theme } from "@earendil-works/pi-coding-agent";
-import { Markdown, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
+import { Markdown, truncateToWidth, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
 import { BoxedEditor, type BoxState } from "./src/editor.ts";
-
-/** Blue box chrome. ponytail: fixed ANSI blue, wire to a theme color if you add one. */
-const BLUE = (s: string) => `\x1b[38;5;39m${s}\x1b[39m`;
 
 type CodeToken = { type: string; text: string; lang?: string };
 
@@ -19,14 +16,16 @@ export function renderCodeBlockLines(
   } = {},
 ): string[] {
   const indent = opts.indent ?? "  ";
+  const wrapWidth = Math.max(1, width - visibleWidth(indent));
   const highlighted = opts.highlight?.(code, opts.lang) ?? code.split("\n");
   const lines: string[] = [];
   for (const hlLine of highlighted) {
     // Pre-wrap so Markdown.render() never re-wraps (which would break padding/bg).
-    for (const wrapped of wrapTextWithAnsi(hlLine, Math.max(1, width - indent.length))) {
+    for (const wrapped of wrapTextWithAnsi(hlLine, wrapWidth)) {
       const line = indent + wrapped;
-      const pad = " ".repeat(Math.max(0, width - visibleWidth(line)));
-      lines.push(opts.bg ? opts.bg(line + pad) : line + pad);
+      const clipped = visibleWidth(line) > width ? truncateToWidth(line, width, "") : line;
+      const pad = " ".repeat(Math.max(0, width - visibleWidth(clipped)));
+      lines.push(opts.bg ? opts.bg(clipped + pad) : clipped + pad);
     }
   }
   return lines;
@@ -71,7 +70,7 @@ export default function (pi: ExtensionAPI) {
   // Read theme lazily so /theme switches take effect.
   let ui: { theme: Theme } | undefined;
 
-  const state: BoxState = { working: false, tick: 0, color: BLUE };
+  const state: BoxState = { working: false, tick: 0 };
   let repaint: (() => void) | undefined;
   let timer: NodeJS.Timeout | undefined;
 

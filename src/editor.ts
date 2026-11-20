@@ -7,7 +7,6 @@ export interface BoxState {
   working: boolean;
   tick: number;
   model?: string;
-  color: (s: string) => string;
 }
 
 export class BoxedEditor extends CustomEditor {
@@ -19,27 +18,32 @@ export class BoxedEditor extends CustomEditor {
     keybindings: ConstructorParameters<typeof CustomEditor>[2],
     chrome: BoxState,
   ) {
-    super(tui, theme, keybindings);
+    // Stock Pi editor embeds the working loader in the top border so the dock
+    // height does not jump when a turn ends. Without this, Pi parks a 2-line
+    // loader above the editor and clears it on settle — Roamgate mobile wraps.
+    super(tui, theme, keybindings, { embedWorkingStatus: true });
     this.chrome = chrome;
   }
 
   render(width: number): string[] {
-    const raw = super.render(Math.max(3, width - 2));
+    const raw = super.render(Math.max(1, width - 2));
     // Editor output: top rule, body…, bottom rule, then optional autocomplete lines.
     let bottom = raw.length - 1;
     while (bottom > 0 && !isRule(raw[bottom]!)) bottom--;
     const body = raw.slice(1, bottom);
     const extras = raw.slice(bottom + 1);
+    const topHint = ruleLabel(raw[0]!);
 
+    // Pi writes thinking/bash into this.borderColor (updateEditorBorderColor).
     const boxed = boxLines(
       body,
       width,
-      this.chrome.color,
+      this.borderColor,
       borderLabel({
         working: this.chrome.working,
         tick: this.chrome.tick,
         model: this.chrome.model,
-        scrollHint: ruleLabel(raw[0]!),
+        scrollHint: /[↑↓]/.test(topHint) ? topHint : undefined,
       }),
       ruleLabel(raw[bottom]!),
     );

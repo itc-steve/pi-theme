@@ -4,9 +4,13 @@
 
 # pi-theme
 
-Personal Pi Theme — a small [Pi](https://pi.dev) extension that gives terminal output cleaner code blocks and the input editor a focused blue frame.
+Personal Pi Theme — a small [Pi](https://pi.dev) package: a dark `pi-theme` palette plus cleaner code blocks and a focused editor frame.
 
 ## What changes
+
+### Palette
+
+After `pi install`, **pi-theme** shows up in `/settings` → Theme. Matches Noctalia's **electric-blue** palette: charcoal backgrounds, electric-blue accents, cyan highlights, gold strings, green functions. Tweak `themes/pi-theme.json` (`vars` first). This is a static palette, not automatic Noctalia sync.
 
 ### Fenceless code blocks
 
@@ -14,7 +18,7 @@ Fenced Markdown code renders without visible backtick fences. Syntax highlightin
 
 ### Boxed editor
 
-The input editor gets a blue `╭─╮ │ ╰─╯` frame. Its top border shows the active model and a braille spinner while Pi works. Scroll hints move into the top and bottom borders.
+The input editor gets a `╭─╮ │ ╰─╯` frame. Border color is Pi's live editor border: thinking-level tokens (`thinkingOff`…`thinkingMax`) or `bashMode`. Top border shows the active model and a braille spinner while Pi works. Scroll hints move into the top and bottom borders.
 
 ## Install
 

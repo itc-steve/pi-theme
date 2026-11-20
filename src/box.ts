@@ -19,17 +19,26 @@ export function boxLines(
   topLabel = "",
   bottomLabel = "",
 ): string[] {
-  const inner = Math.max(1, width - 2);
+  if (width < 3) {
+    const w = Math.max(1, width);
+    const bar = color("─".repeat(w));
+    return [bar, ...body.map((l) => truncateToWidth(l, w, "")), bar];
+  }
+  const inner = width - 2;
   const border = (label: string, left: string, right: string) => {
-    if (!label) return color(left + "─".repeat(inner) + right);
-    const text = ` ${truncateToWidth(label, Math.max(1, inner - 4))} `;
+    const unlabeled = color(left + "─".repeat(inner) + right);
+    // labeled form is left+─+" "+label+" "+fill+─+right — needs inner >= 4
+    if (!label || inner < 4) return unlabeled;
+    const text = ` ${truncateToWidth(label, inner - 4)} `;
     const fill = Math.max(0, inner - 1 - visibleWidth(text));
-    return color(`${left}─`) + text + color("─".repeat(fill) + right);
+    const line = color(`${left}─`) + text + color("─".repeat(fill) + right);
+    return visibleWidth(line) <= width ? line : unlabeled;
   };
   const lines = [border(topLabel, "╭", "╮")];
   for (const line of body) {
-    const pad = " ".repeat(Math.max(0, inner - visibleWidth(line)));
-    lines.push(color("│") + line + pad + color("│"));
+    const clipped = visibleWidth(line) > inner ? truncateToWidth(line, inner, "") : line;
+    const pad = " ".repeat(Math.max(0, inner - visibleWidth(clipped)));
+    lines.push(color("│") + clipped + pad + color("│"));
   }
   lines.push(border(bottomLabel, "╰", "╯"));
   return lines;

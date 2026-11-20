@@ -1,5 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { visibleWidth } from "@earendil-works/pi-tui";
 import { renderCodeBlockLines } from "../index.ts";
 
 const strip = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, "");
@@ -19,5 +20,12 @@ describe("renderCodeBlockLines", () => {
     for (const l of lines) assert.equal(strip(l).length, 6);
     assert.ok(lines[0]!.includes("\x1b[31m"));
     assert.equal(strip(lines.join("")).trim().replace(/\s+/g, ""), "xxxxxxxx");
+  });
+
+  it("does not exceed width for wide glyphs or wide indent", () => {
+    for (const l of renderCodeBlockLines("界", 3)) assert.ok(visibleWidth(l) <= 3);
+    for (const l of renderCodeBlockLines("x".repeat(30), 20, { indent: "界" })) {
+      assert.ok(visibleWidth(l) <= 20);
+    }
   });
 });

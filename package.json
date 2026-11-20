@@ -1,6 +1,6 @@
 {
   "name": "@itc-steve/pi-theme",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Personal Pi Theme",
   "keywords": [
     "pi-package",
@@ -29,6 +29,7 @@
   "files": [
     "index.ts",
     "src",
+    "themes",
     "assets",
     "README.md",
     "LICENSE"
@@ -39,6 +40,9 @@
   "pi": {
     "extensions": [
       "./index.ts"
+    ],
+    "themes": [
+      "./themes"
     ]
   },
   "peerDependencies": {
